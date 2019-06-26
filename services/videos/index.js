@@ -3,28 +3,28 @@ const { buildFederatedSchema } = require("@apollo/federation");
 
 const typeDefs = gql`
   extend type Query {
-    topProducts(first: Int = 5): [Product]
+    topVideos(first: Int = 5): [Video]
   }
 
-  type Product @key(fields: "upc") {
-    upc: String!
+  type Video @key(fields: "id") {
+    id: String!
     name: String
-    price: Int
-    weight: Int
+    url: String
+    length: Int
   }
 `;
 
 const resolvers = {
-  Product: {
+  Video: {
     __resolveReference(object) {
-      return products.find(product => product.upc === object.upc);
+      return videos.find(video => video.id === object.id);
     }
   },
   Query: {
-    topProducts(_, args) {
-      return products.slice(0, args.first);
+    topVideos(_, args) {
+      return videos.slice(0, args.first);
     }
-  }
+  },
 };
 
 const server = new ApolloServer({
@@ -40,23 +40,23 @@ server.listen({ port: 4003 }).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
 
-const products = [
+const videos = [
   {
-    upc: "1",
-    name: "Table",
-    price: 899,
-    weight: 100
+    id: "1",
+    name: "Video 1",
+    url: '/video-1',
+    length: 180
   },
   {
-    upc: "2",
-    name: "Couch",
-    price: 1299,
-    weight: 1000
+    id: "2",
+    name: "Video 2",
+    url: '/video-2',
+    length: 120
   },
   {
-    upc: "3",
-    name: "Chair",
-    price: 54,
-    weight: 50
+    id: "3",
+    name: "Video 3",
+    url: '/video-3',
+    length: 60
   }
 ];
