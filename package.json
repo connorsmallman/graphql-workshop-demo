@@ -2,9 +2,10 @@
   "name": "federation-demo",
   "main": "gateway.js",
   "scripts": {
-    "start-gateway": "nodemon gateway.js",
-    "start-service-models": "nodemon services/models/index.js",
-    "start-service-videos": "nodemon services/videos/index.js",
+    "start-gateway": "npx node gateway.js",
+    "start-client": "npx ./client/node_modules/.bin/babel-node --config=client/babel.config.js client/index.js",
+    "start-service-models": "npx node services/models/index.js",
+    "start-service-videos": "npx node services/videos/index.js",
     "start-services": "concurrently \"npm:start-service-*\"",
     "postinstall": "lerna bootstrap"
   },
@@ -15,7 +16,12 @@
   },
   "dependencies": {
     "@apollo/gateway": "latest",
+    "apollo-boost": "^0.4.3",
     "apollo-server": "^2.5.1-alpha.1",
-    "graphql": "latest"
+    "express": "^4.17.1",
+    "graphql": "^14.3.1",
+    "react": "^16.8.6",
+    "react-apollo": "^2.5.8",
+    "react-dom": "^16.8.6"
   }
 }

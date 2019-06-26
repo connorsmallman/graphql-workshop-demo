@@ -1,4 +1,4 @@
 {
-  "packages": ["services/*"],
+  "packages": ["services/*","client"],
   "version": "independent"
 }
