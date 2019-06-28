@@ -1,6 +1,8 @@
 const { ApolloServer, gql } = require("apollo-server");
 const { buildFederatedSchema } = require("@apollo/federation");
 
+let idCount = 0;
+
 const typeDefs = gql`
   extend type Query {
     topVideos(first: Int = 5): [Video]
@@ -10,7 +12,11 @@ const typeDefs = gql`
     id: String!
     name: String
     url: String
-    length: Int
+    length: String
+  }
+
+  type Mutation {
+    addVideo(name: String, url: String, length: String): Video
   }
 `;
 
@@ -25,6 +31,18 @@ const resolvers = {
       return videos.slice(0, args.first);
     }
   },
+  Mutation: {
+    addVideo: (parent, args) => {
+      const video = {
+        id: `${idCount++}`,
+        name: args.name,
+        url: args.url,
+        length: args.length,
+      }
+      videos.push(video)
+      return video;
+   }
+  }
 };
 
 const server = new ApolloServer({
@@ -40,23 +58,4 @@ server.listen({ port: 4003 }).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
 
-const videos = [
-  {
-    id: "1",
-    name: "Video 1",
-    url: '/video-1',
-    length: 180
-  },
-  {
-    id: "2",
-    name: "Video 2",
-    url: '/video-2',
-    length: 120
-  },
-  {
-    id: "3",
-    name: "Video 3",
-    url: '/video-3',
-    length: 60
-  }
-];
+const videos = [];
